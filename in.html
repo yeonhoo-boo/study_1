@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BTS THE CITY ARIRANG</title>
+  <style>
+    /* 폰트: 한글(Noto Sans), 영문 타이틀(Bebas Neue) */
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@700;900&family=Bebas+Neue&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    .poster {
+      position: relative;
+      width: 480px;
+      height: 680px;
+      background: #F3213B; /* 쨍한 레드 */
+      overflow: hidden;
+    }
+
+    /* ---------------------------------
+       배경 장식 요소 (이모지 & CSS 도형)
+    --------------------------------- */
+    .deco {
+      position: absolute;
+      user-select: none;
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.2));
+    }
+    
+    /* 필터를 이용해 이모지를 빨간 배경에 맞게 모노톤 느낌으로 변경 */
+    .monotone-filter {
+      filter: sepia(1) saturate(5) hue-rotate(330deg) brightness(0.9) contrast(1.2);
+    }
+
+    /* 상단 왼쪽 건물 (서울역 느낌) */
+    .station { top: 10px; left: 10px; font-size: 110px; transform: rotate(-5deg); opacity: 0.85; }
+    
+    /* 상단 오른쪽 찌개 (떡볶이/찌개) */
+    .stew { top: 15px; right: 10px; font-size: 140px; transform: rotate(15deg); }
+
+    /* 중간 왼쪽 빨간 봉투들 */
+    .envelopes {
+      top: 240px; left: 20px; font-size: 100px; transform: rotate(-25deg);
+      filter: hue-rotate(340deg) brightness(0.8); /* 배경보다 약간 어두운 빨강 */
+    }
+
+    /* 중간 오른쪽 필름/컬러칩 느낌의 사각형 */
+    .color-chip {
+      position: absolute;
+      top: 240px; right: 30px;
+      width: 60px; height: 160px;
+      border: 3px solid rgba(255, 255, 255, 0.8);
+      transform: rotate(15deg);
+      display: flex;
+      flex-direction: column;
+    }
+    .color-chip div { flex: 1; border-bottom: 2px solid rgba(255, 255, 255, 0.8); }
+    .color-chip div:last-child { border-bottom: none; background: white; }
+
+    /* 하단 왼쪽 김밥 */
+    .gimbap { bottom: 120px; left: 20px; font-size: 150px; transform: rotate(-20deg); }
+
+    /* 하단 오른쪽 붕어빵 */
+    .fish-bread { bottom: 200px; right: 20px; font-size: 120px; transform: rotate(15deg); }
+
+    /* 하단 젓가락 (CSS로 막대 3개 그림) */
+    .sticks {
+      position: absolute;
+      top: 420px; left: 20px;
+      transform: rotate(-35deg);
+    }
+    .stick { width: 10px; height: 90px; background: rgba(255, 255, 255, 0.8); border-radius: 5px; position: absolute; }
+    .stick:nth-child(1) { left: 0; top: 0; transform: rotate(-10deg); }
+    .stick:nth-child(2) { left: 25px; top: -10px; transform: rotate(5deg); }
+    .stick:nth-child(3) { left: 60px; top: -15px; width: 60px; height: 15px; transform: rotate(80deg); }
+
+    /* 하단 다리 (한강 대교 느낌) */
+    .bridge { bottom: 140px; right: 20px; font-size: 70px; opacity: 0.9; }
+
+
+    /* ---------------------------------
+       중앙 텍스트 (종이 테이프)
+    --------------------------------- */
+    .title-area {
+      position: absolute;
+      top: 150px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 10;
+    }
+
+    /* 찢어진 종이 테이프 효과 (클립 패스와 그라데이션) */
+    .tape {
+      background: #fdfdfd;
+      color: #000;
+      font-family: 'Bebas Neue', sans-serif; /* 포스터의 길쭉한 영문 폰트 */
+      padding: 0px 30px;
+      text-align: center;
+      line-height: 1;
+      box-shadow: 2px 5px 10px rgba(0,0,0,0.2);
+      position: relative;
+      /* 종이 질감 살짝 추가 */
+      background-image: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px);
+    }
+    /* 테이프 끝부분을 거칠게 만듦 */
+    .tape::before, .tape::after {
+      content: "";
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 15px;
+      background: inherit;
+    }
+    .tape::before { left: -10px; clip-path: polygon(100% 0, 0 5%, 100% 15%, 0 25%, 100% 35%, 0 45%, 100% 55%, 0 65%, 100% 75%, 0 85%, 100% 95%, 0 100%); }
+    .tape::after { right: -10px; clip-path: polygon(0 0, 100% 5%, 0 15%, 100% 25%, 0 35%, 100% 45%, 0 55%, 100% 65%, 0 75%, 100% 85%, 0 95%, 100% 100%); }
+
+    /* 각 줄 테이프 개별 조정 */
+    .t1 { font-size: 100px; transform: rotate(-2deg); margin-bottom: -15px; padding-top: 10px;}
+    .t2 { font-size: 90px; transform: rotate(1deg); margin-bottom: -10px; padding-top: 10px;}
+    .t3 { font-size: 85px; transform: rotate(-1deg); padding-top: 10px;}
+
+    /* SEOUL 텍스트 */
+    .seoul {
+      margin-top: 30px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 70px;
+      color: white;
+      letter-spacing: 5px;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    }
+
+
+    /* ---------------------------------
+       하단 심볼 (동그라미 3개)
+    --------------------------------- */
+    .symbols {
+      position: absolute;
+      bottom: 80px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .circle-symbol {
+      width: 60px; height: 60px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* 첫 번째 (가운데 점) */
+    .s1::after { content: ""; width: 16px; height: 16px; background: #F3213B; border-radius: 50%; }
+    
+    /* 두 번째 (가로줄 2개) */
+    .s2 { flex-direction: column; gap: 8px; }
+    .s2 span { width: 40px; height: 8px; background: #F3213B; }
+    
+    /* 세 번째 (에이치 모양) */
+    .s3 { position: relative; }
+    .s3 span:nth-child(1), .s3 span:nth-child(2) { position: absolute; width: 8px; height: 35px; background: #F3213B; top: 12.5px; }
+    .s3 span:nth-child(1) { left: 15px; }
+    .s3 span:nth-child(2) { right: 15px; }
+    .s3 span:nth-child(3) { position: absolute; width: 20px; height: 8px; background: #F3213B; top: 26px; left: 20px; }
+
+
+    /* ---------------------------------
+       최하단 로고 영역
+    --------------------------------- */
+    .footer-logos {
+      position: absolute;
+      bottom: 25px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      z-index: 10;
+      color: white;
+    }
+
+    .logo-bighit { display: flex; align-items: center; gap: 5px; }
+    .logo-bighit .icon { width: 16px; height: 20px; border: 3px solid white; position: relative; }
+    .logo-bighit .icon::after { content:""; position:absolute; top:5px; left:-3px; width:20px; height:4px; background:white; }
+    .logo-bighit .text { font-family: 'Bebas Neue', sans-serif; font-size: 14px; line-height: 0.9; text-align: left; letter-spacing: 1px;}
+
+    .separator { opacity: 0.7; font-size: 20px; font-weight: 300; }
+
+    .logo-hybe { display: flex; flex-direction: column; align-items: flex-start; }
+    .logo-hybe .text-top { font-family: 'Bebas Neue', sans-serif; font-size: 22px; line-height: 1; letter-spacing: 2px;}
+    .logo-hybe .text-sub { font-size: 6px; letter-spacing: 0.5px; opacity: 0.9; }
+
+    .logo-baemin { font-family: 'Noto Sans KR', sans-serif; font-size: 18px; font-weight: 900; letter-spacing: -1px; }
+
+  </style>
+</head>
+<body>
+<div class="poster">
+
+  <div class="deco station monotone-filter">🏛️</div>
+  <div class="deco stew monotone-filter">🍲</div>
+  
+  <div class="deco envelopes">💌</div>
+  
+  <div class="color-chip">
+    <div></div><div></div><div></div><div></div>
+  </div>
+
+  <div class="deco gimbap monotone-filter">🍱</div>
+  <div class="deco fish-bread monotone-filter">🐟</div>
+  <div class="deco bridge monotone-filter">🌉</div>
+
+  <div class="sticks">
+    <div class="stick"></div>
+    <div class="stick"></div>
+    <div class="stick"></div>
+  </div>
+
+  <div class="title-area">
+    <div class="tape t1">BTS</div>
+    <div class="tape t2">THE CITY</div>
+    <div class="tape t3">ARIRANG</div>
+    <div class="seoul">SEOUL</div>
+  </div>
+
+  <div class="symbols">
+    <div class="circle-symbol s1"></div>
+    <div class="circle-symbol s2">
+      <span></span><span></span>
+    </div>
+    <div class="circle-symbol s3">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <div class="footer-logos">
+    <div class="logo-bighit">
+      <div class="icon"></div>
+      <div class="text">BIGHIT<br>MUSIC</div>
+    </div>
+    <div class="separator">|</div>
+    <div class="logo-hybe">
+      <div class="text-top">HYBE</div>
+      <div class="text-sub">WE BELIEVE IN MUSIC</div>
+    </div>
+    <div class="logo-baemin">배달의민족</div>
+  </div>
+
+</div>
+</body>
+</html>
