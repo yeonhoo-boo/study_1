@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>배민 페스타</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@700;900&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #111;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.card {
+  position: relative;
+  width: 480px;
+  height: 480px;
+  background: #2AC1BC; 
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  line-height: 1;
+}
+
+.sub {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.title {
+  font-size: 110px;
+  font-weight: 900;
+  letter-spacing: -6px;
+  line-height: 0.85;
+}
+
+.date {
+  margin-top: 20px;
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.badge {
+  position: absolute;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 900;
+  z-index: 11;
+}
+
+.b1{width:50px;height:50px;background:#FF3E82;color:#fff;top:6%;left:18%;}
+.b2{width:50px;height:50px;background:#00C853;color:#fff;top:5%;right:5%;}
+.b3{width:34px;height:34px;background:#007A6E;color:#fff;top:38%;right:4%;}
+.b4{width:60px;height:60px;background:#FF3E82;color:#fff;bottom:12%;left:30%;}
+.b5{width:34px;height:34px;background:#00C853;color:#fff;bottom:5%;right:32%;}
+.b6{width:50px;height:50px;background:#FFD600;color:#111;bottom:5%;right:12%;}
+.b7{width:70px;height:70px;background:#007A6E;color:#fff;bottom:-5%;left:-5%;}
+</style>
+</head>
+
+<body>
+<div class="card">
+  <canvas id="c"></canvas>
+
+  <div class="badge b1">%</div>
+  <div class="badge b2">%</div>
+  <div class="badge b3">%</div>
+  <div class="badge b4">%</div>
+  <div class="badge b5">%</div>
+  <div class="badge b6">%</div>
+  <div class="badge b7">%</div>
+
+  <div class="content">
+    <div class="sub">배달부터 장보기까지</div>
+    <div class="title">배민<br>페스타</div>
+    <div class="date">3.2 - 3.29</div>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+const W = 480;
+const H = 480;
+canvas.width = W;
+canvas.height = H;
+
+const COLORS = ['#FF3E82', '#00C853', '#FFD600', '#4A90E2', '#FFFFFF'];
+
+function drawPill(x, y, angle, len, thick, color) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(angle);
+
+  const r = thick / 2;
+
+  ctx.beginPath();
+  ctx.roundRect(-len/2, -r, len, thick, r);
+  ctx.fillStyle = color;
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function render() {
+  ctx.clearRect(0, 0, W, H);
+
+  const cx = W / 2;
+  const cy = H / 2;
+
+  const rings = [
+    { count: 40, r: 220 },
+    { count: 35, r: 190 },
+    { count: 30, r: 160 },
+    { count: 25, r: 130 },
+    { count: 20, r: 100 },
+    { count: 15, r: 70 }
+  ];
+
+  rings.forEach((ring, idx) => {
+    for (let i = 0; i < ring.count; i++) {
+
+      const angle = (Math.PI * 2 / ring.count) * i;
+
+      const x = cx + Math.cos(angle) * ring.r;
+      const y = cy + Math.sin(angle) * ring.r;
+
+    
+      if (ring.r < 90) continue;
+
+      const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+
+      const len = 14 + Math.random() * 20;
+      const thick = 4 + Math.random() * 5;
+
+      drawPill(x, y, angle + Math.PI / 2, len, thick, color);
+    }
+  });
+}
+
+render();
+</script>
+</body>
+</html>
