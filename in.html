@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BTS THE CITY ARIRANG</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@700;900&family=Black+Han+Sans&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    .poster {
+      position: relative;
+      width: 420px;
+      height: 600px;
+      background: #F5163B;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* 흩뿌려진 일러스트 요소들 */
+    .deco {
+      position: absolute;
+      color: #ff6b80;
+      font-size: 72px;
+      user-select: none;
+    }
+
+    /* 건물 */
+    .building {
+      top: -10px; left: -10px;
+      width: 180px; height: 130px;
+      background: none;
+    }
+    .building svg { width: 100%; height: 100%; opacity: 0.85; }
+
+    /* 음식들 */
+    .food1 { top: -10px; right: -5px; font-size: 88px; transform: rotate(-15deg); }
+    .food2 { bottom: 130px; left: -5px; font-size: 80px; transform: rotate(10deg); }
+    .food3 { bottom: 100px; right: 10px; font-size: 64px; transform: rotate(-10deg); }
+    .bridge { bottom: 140px; right: 20px; font-size: 40px; }
+
+    /* 봉투 */
+    .envelope { top: 185px; left: 10px; font-size: 72px; transform: rotate(-15deg); }
+
+    /* 젓가락 */
+    .chopsticks { top: 310px; left: 15px; font-size: 48px; transform: rotate(-35deg); }
+
+    /* 테이프 찢어진 종이 + 타이틀 */
+    .title-wrap {
+      position: absolute;
+      top: 110px;
+      left: 0; right: 0;
+      padding: 0 20px;
+      z-index: 10;
+    }
+
+    .tape-paper {
+      background: white;
+      padding: 18px 24px 16px;
+      position: relative;
+      transform: rotate(-1deg);
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+    }
+
+    .tape-paper::before,
+    .tape-paper::after {
+      content: '';
+      position: absolute;
+      background: rgba(255,255,255,0.7);
+      height: 22px;
+      width: 60px;
+    }
+    .tape-paper::before { top: -10px; left: 20px; transform: rotate(-2deg); }
+    .tape-paper::after  { top: -10px; right: 20px; transform: rotate(2deg); }
+
+    .main-title {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 62px;
+      font-weight: 900;
+      color: #111;
+      line-height: 1.0;
+      letter-spacing: -2px;
+    }
+
+    /* 작은 종이 오른쪽 */
+    .small-paper {
+      position: absolute;
+      top: 130px;
+      right: 24px;
+      width: 50px;
+      height: 70px;
+      background: rgba(255,255,255,0.5);
+      transform: rotate(3deg);
+      z-index: 9;
+    }
+
+    /* SEOUL */
+    .seoul-wrap {
+      position: absolute;
+      top: 340px;
+      left: 0; right: 0;
+      text-align: center;
+      z-index: 10;
+    }
+    .seoul {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 54px;
+      font-weight: 900;
+      color: white;
+      letter-spacing: 4px;
+    }
+
+    /* 하단 아이콘 3개 */
+    .icons {
+      position: absolute;
+      bottom: 90px;
+      left: 0; right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      z-index: 10;
+    }
+
+    .icon-circle {
+      width: 52px; height: 52px;
+      border: 3px solid white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .icon-inner {
+      width: 18px; height: 18px;
+      background: white;
+      border-radius: 50%;
+    }
+    .icon-lines {
+      width: 52px; height: 52px;
+      border: 3px solid white;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+    .icon-lines span {
+      display: block;
+      width: 26px; height: 3px;
+      background: white;
+      border-radius: 2px;
+    }
+    .icon-square {
+      width: 52px; height: 52px;
+      border: 3px solid white;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+    .icon-square span {
+      display: block;
+      width: 26px; height: 3px;
+      background: white;
+      border-radius: 2px;
+    }
+
+    /* 하단 로고 영역 */
+    .logos {
+      position: absolute;
+      bottom: 18px;
+      left: 0; right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      z-index: 10;
+    }
+    .logo-item {
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      letter-spacing: -0.3px;
+    }
+    .logo-sep {
+      color: white;
+      opacity: 0.5;
+      font-size: 18px;
+    }
+    .bighit-box {
+      border: 2px solid white;
+      padding: 2px 5px;
+      font-size: 9px;
+      font-weight: 900;
+      color: white;
+      letter-spacing: 0;
+    }
+    .baemin-text {
+      font-size: 13px;
+      font-weight: 900;
+      color: white;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+  </style>
+</head>
+<body>
+<div class="poster">
+
+  <!-- 건물 일러스트 (SVG) -->
+  <div class="deco building">
+    <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- 건물 본체 -->
+      <rect x="20" y="50" width="160" height="85" fill="#ff6b80" stroke="white" stroke-width="2"/>
+      <!-- 돔 -->
+      <ellipse cx="100" cy="50" rx="40" ry="25" fill="#ff6b80" stroke="white" stroke-width="2"/>
+      <rect x="60" y="48" width="80" height="10" fill="#ff6b80"/>
+      <!-- 창문들 -->
+      <rect x="35" y="65" width="18" height="22" rx="9" fill="none" stroke="white" stroke-width="1.5"/>
+      <rect x="65" y="65" width="18" height="22" rx="9" fill="none" stroke="white" stroke-width="1.5"/>
+      <rect x="95" y="65" width="18" height="22" rx="9" fill="none" stroke="white" stroke-width="1.5"/>
+      <rect x="125" y="65" width="18" height="22" rx="9" fill="none" stroke="white" stroke-width="1.5"/>
+      <rect x="155" y="65" width="18" height="22" rx="9" fill="none" stroke="white" stroke-width="1.5"/>
+      <!-- 아치 문 -->
+      <rect x="80" y="100" width="40" height="35" rx="20" fill="none" stroke="white" stroke-width="2"/>
+      <!-- 계단 -->
+      <rect x="10" y="133" width="180" height="4" fill="white"/>
+      <rect x="20" y="129" width="160" height="4" fill="white"/>
+    </svg>
+  </div>
+
+  <!-- 찌개 🍲 -->
+  <div class="deco food1">🥘</div>
+
+  <!-- 봉투 -->
+  <div class="deco envelope">✉️</div>
+
+  <!-- 젓가락 -->
+  <div class="deco chopsticks" style="color:white;font-size:36px;letter-spacing:-8px;">🥢</div>
+
+  <!-- 작은 종이 -->
+  <div class="small-paper"></div>
+
+  <!-- 타이틀 종이 -->
+  <div class="title-wrap">
+    <div class="tape-paper">
+      <div class="main-title">BTS<br>THE CITY<br>ARIRANG</div>
+    </div>
+  </div>
+
+  <!-- SEOUL -->
+  <div class="seoul-wrap">
+    <div class="seoul">SEOUL</div>
+  </div>
+
+  <!-- 김밥 🍱 -->
+  <div class="deco food2">🍱</div>
+
+  <!-- 붕어빵 🐟 -->
+  <div class="deco food3">🐟</div>
+
+  <!-- 다리 -->
+  <div class="deco bridge" style="color:white;font-size:28px;">🌉</div>
+
+  <!-- 하단 아이콘 3개 -->
+  <div class="icons">
+    <div class="icon-circle"><div class="icon-inner"></div></div>
+    <div class="icon-lines">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="icon-square">
+      <span></span><span></span>
+    </div>
+  </div>
+
+  <!-- 로고 -->
+  <div class="logos">
+    <div class="logo-item">
+      <span class="bighit-box">B</span>
+      <span style="font-size:9px;">BIGHIT<br>MUSIC</span>
+    </div>
+    <div class="logo-sep">|</div>
+    <div class="logo-item" style="flex-direction:column;gap:1px;">
+      <span style="font-size:10px;font-weight:900;">HYBE</span>
+      <span style="font-size:7px;opacity:0.8;">WE BELIEVE IN MUSIC</span>
+    </div>
+    <div class="logo-sep">|</div>
+    <div class="baemin-text">배달의민족</div>
+  </div>
+
+</div>
+</body>
+</html>
